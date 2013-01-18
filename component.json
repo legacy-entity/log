@@ -1,0 +1,7 @@
+{
+  "name": "log",
+  "description": "log system",
+  "version": "0.0.1",
+  "keywords": ["game","log","system"],
+  "scripts": ["index.js"]
+}
