@@ -1,29 +1,24 @@
 
-var log = function (obj, prop) {
-  if (!prop) {
-    log.displayOnce.push(obj)
-  }
-  else {
-    log.watching.push({ obj: obj, prop: prop })
-  }
+var log = function (prop, val) {
+  log.data[prop] = val
 }
 
 log.el = document.createElement('div')
 log.html = []
-log.watching = []
-log.displayOnce = []
+log.data = {}
 
-module.exports = function (obj, prop) {
-  if (obj instanceof Element) {
-    log.parentEl = obj
+module.exports = function (prop, val) {
+  if (prop instanceof Element) {
+    log.parentEl = prop
   }
   else {
-    log(obj)
+    log(prop, val)
   }
   return log
 }
 
 log.init = function () {
+  log.el.classList.add('log')
   log.parentEl.appendChild(log.el)
 }
 
@@ -34,13 +29,9 @@ log.tear = function () {
 log.update = function () {
   var html = log.html
   html.length = 0
-  /*log.watching.forEach(function (w) {
-    html.push('<pre>'+w.obj+'.'+w.prop+': '+w.obj[w.prop]+'</pre>')
-  })*/
-  log.displayOnce.forEach(function (val) {
-    html.push('<pre>'+val+'</pre>')
-  })
-  log.displayOnce = []
+  for (var prop in log.data) {
+    html.push('<pre>'+prop+': '+log.data[prop]+'</pre>')
+  }
 }
 
 log.render = function () {
